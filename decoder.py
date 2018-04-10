@@ -1,24 +1,30 @@
 import struct
-mypath = "move mob.vox"
+file = "test.vox"
 
-def importVox(path):
+def importVoxels(path):
+    voxel_list = []  
     with open(path, 'rb') as f:
         bytes = f.read(4)
         file_id = struct.unpack("4s",  bytes)[0]
-        if file_id == b'VOX ':
-            print("Reading...")
-            matlist = [];
+        if file_id != b'VOX ':
+            print('Not a VOX file.')
+        else:
+            f.seek(32)
+            size_x, size_y, size_z = struct.unpack('iii',f.read(12))
+            dimensions = (size_x,size_y,size_z)
+            print(dimensions)
             f.seek(56)
             bytes = f.read(4)
-            numvoxels = struct.unpack('I', bytes)
-            for x in range(0, numvoxels[0]):
+            numvoxels = struct.unpack('i', bytes)[0]
+            print("Reading", numvoxels, "voxels...")
+            for x in range(0, numvoxels):
                 bytes = f.read(4)
                 voxel = struct.unpack('bbbB', bytes)
-                matid = voxel[3]
-                print(voxel[0], voxel[1], voxel[2], matid)
-        else:
-            print('Not a VOX file.')
-           
-importVox(mypath)
+                voxel_list.append(voxel)
+        voxel_list.sort(key=lambda v:(v[2],v[1],v[0]))
+            
+    return dimensions, voxel_list
+
+dimensions, voxels = importVoxels(file)
 
 print("Completed!")
