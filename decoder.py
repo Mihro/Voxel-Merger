@@ -36,7 +36,7 @@ def importVoxels(path):
 def pass_1D(dimensions,voxels):
     objects = []
     object_count = 0
-    plane_coords = sorted(set([v[1:3] for v in voxels]))
+    plane_coords = sorted(set([v[1:3] for v in voxels]),key=lambda c:(c[1],c[0]))
     for y,z in plane_coords:
         prev_x = None
         x_voxels = list(filter(lambda v: v[1]==y and v[2]==z, voxels))
@@ -57,6 +57,7 @@ def pass_1D(dimensions,voxels):
     return objects
 
 dimensions, voxels = importVoxels(file)
+objects = pass_1D(dimensions, [v[:3] for v in voxels])
 
 
 print("\nCompleted!")
