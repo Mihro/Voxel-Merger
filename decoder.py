@@ -40,14 +40,14 @@ def pass_1D(dimensions,voxels):
     for y,z in plane_coords:
         prev_x = None
         x_voxels = list(filter(lambda v: v[1]==y and v[2]==z, voxels))
-        for x in enumerate([coord[0] for coord in x_voxels]):
-            if x[1]-1 != prev_x:
-                new_origin = x_voxels[x[0]]
+        for i,x in enumerate([coord[0] for coord in x_voxels]):
+            if x-1 != prev_x:
+                new_origin = x_voxels[i]
                 objects.append(cuboid(new_origin))
             else:
                 
                 objects[-1].l += 1
-            prev_x = x[1]
+            prev_x = x
             
     print("1D Pass - Object Origins:")
     print("\t    Origin  Size")
