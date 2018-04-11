@@ -49,9 +49,10 @@ def pass_1D(dimensions,voxels):
                 objects[-1].l += 1
             prev_x = x[1]
             
-    print("1D Object Origins:")
-    for o in objects:
-        print("\t",o)
+    print("1D Pass - Object Origins:")
+    print("\t    Origin  Size")
+    for i,o in enumerate(objects):
+        print("Object"+" "*(1-(i+1)//10),i+1,"-",o.x,o.y,o.z," ",o.l,o.w,o.h)
 
 dimensions, voxels = importVoxels(file)
 pass_1D(dimensions, [v[:3] for v in voxels])
