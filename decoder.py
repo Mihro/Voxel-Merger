@@ -54,8 +54,9 @@ def pass_1D(dimensions,voxels):
     for i,o in enumerate(objects):
         print("Object"+" "*(1-(i+1)//10),i+1,"-",o.x,o.y,o.z," ",o.l,o.w,o.h)
 
+    return objects
+
 dimensions, voxels = importVoxels(file)
-pass_1D(dimensions, [v[:3] for v in voxels])
 
 
 print("\nCompleted!")
