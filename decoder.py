@@ -1,7 +1,6 @@
 import struct
 file = "test.vox"
 
-
 def importVoxels(path):
     voxel_list = []  
     with open(path, 'rb') as f:
@@ -37,7 +36,10 @@ def pass_1D(dimensions,voxels):
             if x[1]-1 != prev_x:
                 objects.append(x_voxels[x[0]])
             prev_x = x[1]
-    print(objects,"\n")
+            
+    print("1D Object Origins:")
+    for o in objects:
+        print("\t",o)
 
 dimensions, voxels = importVoxels(file)
 pass_1D(dimensions, [v[:3] for v in voxels])
