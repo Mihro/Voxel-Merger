@@ -1,6 +1,15 @@
 import struct
 file = "test.vox"
 
+class cuboid:
+    def __init__(self, origin):
+        self.x = origin[0]
+        self.y = origin[1]
+        self.z = origin[2]
+        self.l = 1
+        self.w = 1
+        self.h = 1
+
 def importVoxels(path):
     voxel_list = []  
     with open(path, 'rb') as f:
@@ -10,9 +19,8 @@ def importVoxels(path):
             print('Not a VOX file.')
         else:
             f.seek(32)
-            size_x, size_y, size_z = struct.unpack('iii',f.read(12))
-            dimensions = (size_x,size_y,size_z)
-            print(dimensions)
+            dimensions = struct.unpack('iii',f.read(12))
+            print("Model dimensions:",dimensions)
             f.seek(56)
             bytes = f.read(4)
             numvoxels = struct.unpack('i', bytes)[0]
@@ -22,7 +30,7 @@ def importVoxels(path):
                 voxel = struct.unpack('bbbb', bytes)
                 voxel_list.append(voxel)
         voxel_list.sort(key=lambda v:(v[2],v[1],v[0]))
-            
+        print() 
     return dimensions, voxel_list
 
 def pass_1D(dimensions,voxels):
@@ -34,7 +42,11 @@ def pass_1D(dimensions,voxels):
         x_voxels = list(filter(lambda v: v[1]==y and v[2]==z, voxels))
         for x in enumerate([coord[0] for coord in x_voxels]):
             if x[1]-1 != prev_x:
-                objects.append(x_voxels[x[0]])
+                new_origin = x_voxels[x[0]]
+                objects.append(cuboid(new_origin))
+            else:
+                
+                objects[-1].l += 1
             prev_x = x[1]
             
     print("1D Object Origins:")
@@ -45,4 +57,4 @@ dimensions, voxels = importVoxels(file)
 pass_1D(dimensions, [v[:3] for v in voxels])
 
 
-print("Completed!")
+print("\nCompleted!")
