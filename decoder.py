@@ -35,12 +35,11 @@ def importVoxels(path):
 
 def pass_1D(dimensions,voxels):
     objects = []
-    object_count = 0
     plane_coords = sorted(set([v[1:3] for v in voxels]),key=lambda c:(c[1],c[0]))
     for y,z in plane_coords:
         prev_x = None
         x_voxels = list(filter(lambda v: v[1]==y and v[2]==z, voxels))
-        for i,x in enumerate([coord[0] for coord in x_voxels]):
+        for i,x in enumerate([coords[0] for coords in x_voxels]):
             if x-1 != prev_x:
                 new_origin = x_voxels[i]
                 objects.append(cuboid(new_origin))
@@ -53,11 +52,30 @@ def pass_1D(dimensions,voxels):
     print("\t    Origin  Size")
     for i,o in enumerate(objects):
         print("Object"+" "*(1-(i+1)//10),i+1,"-",o.x,o.y,o.z," ",o.l,o.w,o.h)
-
+    print()
     return objects
+
+def pass_2D(dimensions,objects):
+    plane_coords = sorted(set([(o.x,o.z) for o in objects]))
+    for x,z in plane_coords:
+        prev_object = cuboid((None,None,None))
+        separate_object = cuboid((None,None,None))
+        y_objects = list(filter(lambda o: o.x==x and o.z==z, objects))
+        print([(o.x,o.y,o.z) for o in y_objects])
+        for i,o in enumerate([o for o in y_objects]):
+            print((o.x,o.y,o.z))
+            if (o.y-1,o.l,o.h) == (prev_object.y,prev_object.l,prev_object.h):
+                print("Merge with",(separate_object.x,separate_object.y,separate_object.z))
+                #Delete current object
+            else:
+                separate_object = o
+                print("Separate Object")
+            prev_object = o
+        print()
+                
 
 dimensions, voxels = importVoxels(file)
 objects = pass_1D(dimensions, [v[:3] for v in voxels])
-
+pass_2D(dimensions,objects)
 
 print("\nCompleted!")
