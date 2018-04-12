@@ -8,7 +8,7 @@ class Cuboid(object):
     self.size = size
 
   def __repr__(self):
-    return "{} {} {}:{}x{}x{}".format(*self.pos, *self.size)
+    return "{}-{}-{}:{}x{}x{}".format(*self.pos, *self.size)
 
   def sameShape(self, other):
     return self.size == other.size
@@ -61,7 +61,6 @@ def importVoxels(path):
       voxel = struct.unpack('bbbb', byts)[:3]
       model[voxel[0]][voxel[1]][voxel[2]] = Cuboid(voxel)
     print("Completed.\n")
-  return model
+  return dimensions, model
 
-voxelList = importVoxels(file)
-print(voxelList)
+dimensions, voxelList = importVoxels(file)
