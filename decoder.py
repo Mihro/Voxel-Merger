@@ -1,7 +1,7 @@
 import struct
 file = "test.vox"
 
-class cuboid:
+class Cuboid:
     def __init__(self, origin):
         self.x = origin[0]
         self.y = origin[1]
@@ -42,7 +42,7 @@ def pass_1D(dimensions,voxels):
         for i,x in enumerate([coords[0] for coords in x_voxels]):
             if x-1 != prev_x:
                 new_origin = x_voxels[i]
-                objects.append(cuboid(new_origin))
+                objects.append(Cuboid(new_origin))
             else:
                 
                 objects[-1].l += 1
@@ -58,8 +58,8 @@ def pass_1D(dimensions,voxels):
 def pass_2D(dimensions,objects):
     plane_coords = sorted(set([(o.x,o.z) for o in objects]))
     for x,z in plane_coords:
-        prev_object = cuboid((None,None,None))
-        separate_object = cuboid((None,None,None))
+        prev_object = Cuboid((None,None,None))
+        separate_object = Cuboid((None,None,None))
         y_objects = list(filter(lambda o: o.x==x and o.z==z, objects))
         print([(o.x,o.y,o.z) for o in y_objects])
         for i,o in enumerate([o for o in y_objects]):
